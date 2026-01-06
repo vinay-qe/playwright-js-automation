@@ -12,6 +12,13 @@ pipeline {
             }
         }
 
+        stage('System Setup') {
+            steps {
+                // Install libatomic and other dependencies needed for Playwright on Linux
+                sh 'sudo apt-get update && sudo apt-get install -y libatomic1'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
