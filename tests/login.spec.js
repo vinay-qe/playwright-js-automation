@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 
+// Testing auto-build.
 test('Verify Swag Labs Shopping Flow', async ({ page }) => {
   // 1. Navigate to the practice site
   await page.goto('https://www.saucedemo.com/');
