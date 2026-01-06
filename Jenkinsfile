@@ -8,6 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                sh 'git config --global --add safe.directory "*"'
                 checkout scm
             }
         }
