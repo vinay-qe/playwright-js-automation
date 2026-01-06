@@ -1,8 +1,8 @@
 pipeline {
-    agent any // Ensure your Jenkins agent has Node.js installed
+    agent any 
 
     tools {
-        nodejs "node" // Name of the Node.js installation configured in Jenkins Global Tool Configuration
+        nodejs "node" // Ensure "node" matches the name in Global Tool Configuration
     }
 
     stages {
@@ -12,24 +12,22 @@ pipeline {
             }
         }
 
-        stage('System Setup') {
+        stage('Install & Setup') {
             steps {
-                // Install libatomic and other dependencies needed for Playwright on Linux
-                sh 'apt-get update && sudo apt-get install -y libatomic1'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
+                // Update package list and install libatomic1 directly
+                sh 'apt-get update && apt-get install -y libatomic1'
+                
+                // Install project dependencies
                 sh 'npm install'
-                // Install browsers needed for the tests
+                
+                // Install Playwright browsers AND all required Linux system dependencies
                 sh 'npx playwright install --with-deps'
             }
         }
 
         stage('Run Tests') {
             steps {
-                // Run tests in headless mode (default in CI)
+                // Running tests in headless mode
                 sh 'npx playwright test'
             }
         }
@@ -37,7 +35,7 @@ pipeline {
 
     post {
         always {
-            // Archive Playwright HTML report
+            // This ensures the report is saved even if tests fail
             publishHTML(target: [
                 allowMissing: false,
                 alwaysLinkToLastBuild: true,
